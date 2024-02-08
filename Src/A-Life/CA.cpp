@@ -1,20 +1,20 @@
-#include "Cells.h"
+#include "CA.h"
 #include "Texture.h"
 
-bool Cells::Initialize()
+bool CA::Initialize()
 {
 	buffer.resize(size.x * size.y);
 
 	return true;
 }
 
-void Cells::Step()
+void CA::Step()
 {
 	// "draw" onto buffer
-	if (mouse_button[1])
-	{
-	Write<uint8_t>(buffer, size.x/2, 0, 1);
-	}
+	//if (mouse_button[1])
+	//{
+	//}
+	Write<uint8_t>(buffer, size.x / 2, 0, 1);
 
 
 	uint8_t rule = 45;
@@ -29,13 +29,13 @@ void Cells::Step()
 		{
 			uint8_t i = 0;
 			// read surrounding cells (x-1, x, x+2), a value between 0-7 can be created by shifting the bits
-			i |= Read<uint8_t>(buffer,  x-1, y) << 2 ;
-			i |= Read<uint8_t>(buffer, x, y) << 1 ;
-			i |= Read<uint8_t>(buffer, x+1, y) << 0 ; 
+			i |= Read<uint8_t>(buffer, x - 1, y) << 2;
+			i |= Read<uint8_t>(buffer, x, y) << 1;
+			i |= Read<uint8_t>(buffer, x + 1, y) << 0;
 
 			// elementary cellular automata rules
 			uint8_t state = (rule & 1 << i) ? 1 : 0;	//<use i as index into rule array to get next generation state>;
-			Write<uint8_t>(buffer, x, y + 1 , state); // middle >> <set cell below current cell>
+			Write<uint8_t>(buffer, x, y + 1, state); // middle >> <set cell below current cell>
 		}
 	}
 
